@@ -88,54 +88,68 @@ var upperCasedCharacters = [
   'Y',
   'Z'
 ];
+
+
+
 let password = [];
 let userInput = {
-  passwordLength: 0,
   requireSpecial: false,
   requireNumbers: false,
   requireUppercase: false
 }
-let requireSpecial = false;
-let requireNumbers = false;
-let requireUppercase = false;
+let optionSpecial = false;
+let optionNumbers = false;
+let optionUppercase = false;
+let passwordLength = '';
 
 // Function to prompt user for password options
 function getPasswordOptions() {
-  userInput.passwordLength = prompt('how long would you like your password (8-64)');
-  userInput.passwordLength = Number(userInput.passwordLength);
-  console.log(userInput.passwordLength);
-  if(userInput.passwordLength >= 8 && userInput.passwordLength <= 64) {
+  passwordLength = prompt('how long would you like your password (8-64)');
+  passwordLength = Number(passwordLength);
+  console.log(passwordLength);
 
-    userInput.requireSpecial = confirm('Do you require special characters?');
-    userInput.requireUppercase = confirm('Do you require uppercase characters?');
-    userInput.requireNumbers = confirm('Do you require numbers?');
-
-  } else {
+  if(passwordLength >= 8 && passwordLength <= 64) {
+    
+    userInput.requireSpecial = prompt('Do you require special characters? Y/N');
+    if(userInput.requireSpecial === 'y' || userInput.requireSpecial === 'Y') {
+      optionSpecial = true
+    }
+      userInput.requireUppercase = prompt('Do you require uppercase characters? Y/N');
+      userInput.requireNumbers = prompt('Do you require numbers? Y/N');
+      console.log(userInput.requireNumbers, userInput.requireSpecial, userInput.requireUppercase);
+    } else {
     getPasswordOptions();
   }
   generatePassword();
 }
 
 
-
 // Function for getting a random element from an array
 function getRandom(arr) {
-  for (i = 0; i < userInput.passwordLength; i++) {
-  let randomChar = arr[Math.floor(Math.random()* arr.length)];
-  password.push(randomChar);
-  console.log(password);
+  return arr[Math.floor(Math.random() * arr.length)];
   }
-}
 
 // Function to generate password with user input
-function generatePassword(passwordLength, requireNumbers, requireSpecial, requireUppercase) {
-  if(requireNumbers && requireSpecial && requireUppercase) {
-    getRandom()
+function generatePassword(optionSpecial, optionNumbers, optionUppercase) {
+  for (i = 0; i < passwordLength; i++) {
+
+    if(optionSpecial === true) {
+      password += getRandom(specialCharacters);
+    }
+
+    if(optionNumbers === true) {
+      password += getRandom(numericCharacters);
+    }
+
+    if(optionUppercase === true) {
+      password += getRandom(upperCasedCharacters);
+    }
+    password += getRandom(lowerCasedCharacters);
   }
-  console.log('got here');
-  getRandom(lowerCasedCharacters);
+ console.log(password);
 }
 
+password.slice(0, passwordLength);
 // Get references to the #generate element
 var generateBtn = document.querySelector('#generate');
 
