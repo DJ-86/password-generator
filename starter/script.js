@@ -90,39 +90,63 @@ var upperCasedCharacters = [
 ];
 
 
+let requireSpecial = false;
+let requireNumbers = false;
+let requireUppercase = false;
 
-let password = [];
-let userInput = {
-  requireSpecial: false,
-  requireNumbers: false,
-  requireUppercase: false
-}
-let optionSpecial = false;
-let optionNumbers = false;
-let optionUppercase = false;
-let passwordLength = '';
 
 // Function to prompt user for password options
 function getPasswordOptions() {
-  passwordLength = prompt('how long would you like your password (8-64)');
-  passwordLength = Number(passwordLength);
-  console.log(passwordLength);
+  // Resets password to an empty string and resets booleans
+  password = '';
+  requireSpecial = false;
+  requireNumbers = false;
+  requireUppercase = false;
 
-  if(passwordLength >= 8 && passwordLength <= 64) {
-    
-    userInput.requireSpecial = prompt('Do you require special characters? Y/N');
-    if(userInput.requireSpecial === 'y' || userInput.requireSpecial === 'Y') {
-      optionSpecial = true
-    }
-      userInput.requireUppercase = prompt('Do you require uppercase characters? Y/N');
-      userInput.requireNumbers = prompt('Do you require numbers? Y/N');
-      console.log(userInput.requireNumbers, userInput.requireSpecial, userInput.requireUppercase);
+  // Prompts the user to input a string that is then converted to a number
+  passwordLength = prompt('How long would you like your password (10-64)');
+  passwordLength = Number(passwordLength);
+  if(passwordLength >= 10 && passwordLength <= 64) {
+  } else {
+  // If number is out of range function resets
+  getPasswordOptions();
+  }
+
+  // Validates user input
+  while(requireSpecial === false) {
+    let userInput = prompt('Do you require special characters? Y/N').toUpperCase();
+    if(userInput === 'Y') {
+      requireSpecial = true; 
+    } else if (userInput === 'N') {
+      break;
     } else {
-    getPasswordOptions();
+      alert('Incorrect response. Please use Y or N')
+    }
+  }
+
+  while(requireNumbers === false) {
+    let userInput = prompt('Do you require numbers? Y/N').toUpperCase();
+    if(userInput === 'Y') {
+      requireNumbers = true;
+    } else if (userInput === 'N') {
+      break;
+    } else {
+      alert('Incorrect response. Please use Y or N')
+    }
+  }
+
+  while(requireUppercase === false) {
+    let userInput = prompt('Do you require uppercase characters? Y/N').toUpperCase();
+    if(userInput === 'Y') {
+      requireUppercase = true;
+    } else if (userInput === 'N') {
+      break;
+    } else {
+      alert('Incorrect response. Please use Y or N')
+    }
   }
   generatePassword();
 }
-
 
 // Function for getting a random element from an array
 function getRandom(arr) {
@@ -130,49 +154,44 @@ function getRandom(arr) {
   }
 
 // Function to generate password with user input
-function generatePassword(optionSpecial, optionNumbers, optionUppercase) {
+function generatePassword() {
   for (i = 0; i < passwordLength; i++) {
-
-    if(optionSpecial === true) {
+    if(requireSpecial) {
       password += getRandom(specialCharacters);
     }
-
-    if(optionNumbers === true) {
+    if(requireNumbers) {
       password += getRandom(numericCharacters);
     }
-
-    if(optionUppercase === true) {
+    if(requireUppercase) {
       password += getRandom(upperCasedCharacters);
     }
     password += getRandom(lowerCasedCharacters);
   }
- console.log(password);
+  password = randomPass(password);
+  return password;
 }
 
-password.slice(0, passwordLength);
+/* function generatePassword provides a password in the format of arr1 arr2 arr3 arr4 arr1 etc. 
+This function converts the password variable to an array which is then randomised with Math.Random, 
+joined back together and then returned to generatePassword function */
+function randomPass() {
+  password = password.slice(0, passwordLength);
+  let passArr = password.split('')
+  let randomPassword = passArr.sort((a, b) => 0.5 - Math.random());
+  password = randomPassword.join('');
+  return password;
+}
+
 // Get references to the #generate element
 var generateBtn = document.querySelector('#generate');
 
 // Write password to the #password input
 function writePassword() {
+  getPasswordOptions();
   var password = generatePassword();
   var passwordText = document.querySelector('#password');
-
   passwordText.value = password;
 }
 
 // Add event listener to generate button
-generateBtn.addEventListener('click', getPasswordOptions);
-
-/* * Generate a password when the button is clicked
-  * Present a series of prompts for password criteria
-    * Length of password
-      * At least 10 characters but no more than 64.
-    * Character types
-      * Lowercase
-      * Uppercase
-      * Numeric
-      * Special characters ($@%&*, etc)
-  * Code should validate for each input and at least one character type should be selected
-  * Once prompts are answered then the password should be generated and displayed in an alert or written to the page
-*/
+generateBtn.addEventListener('click', writePassword);
