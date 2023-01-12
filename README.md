@@ -9,7 +9,7 @@ A configurable password generator that returns a random string of lowercase, upp
 * [Repo](https://github.com/DJ-86/password-generator)
 
 ## Acceptance Criteria
-![Acceptance Criteria](./assets/acs.jpg);
+![Acceptance Criteria](./assets/acs.jpg)
 
 ## Resources:
 * [While loops](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/while)
@@ -17,7 +17,7 @@ A configurable password generator that returns a random string of lowercase, upp
 
 ## Screenshots
 ![Code](./assets/code.JPG);
-![Screen-grab](./assets/screengrab.JPG);
+![Screen-grab](./assets/screengrab.JPG)
 
 ## License
 * [MIT](LICENSE.md)
